@@ -1,0 +1,22 @@
+#page_section {
+  display: flex;
+  flex-direction: row;
+  border-style: solid;
+  border-color: rgb(137, 0, 0);
+  border-width: 0.1rem;
+}
+
+#content_wrapper {
+  border-style: solid;
+  border-color: rgb(137, 0, 0);
+  border-width: 0.1rem;
+  height: 80vh;
+}
+
+#main_area {
+  border-style: solid;
+  border-color: rgb(41, 137, 0);
+  border-width: 0.1rem;
+  display: flex;
+  height: 80vh;
+}

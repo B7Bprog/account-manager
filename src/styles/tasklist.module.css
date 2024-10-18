@@ -1,0 +1,8 @@
+#list_area {
+  border-style: solid;
+  border-color: rgb(41, 137, 0);
+  border-width: 0.1rem;
+  display: flex;
+  overflow-y: auto;
+  height: 60vh;
+}
