@@ -6,6 +6,8 @@ import Contents from "./components/Contents";
 import AccountList, { Account } from "./components/AccountList";
 import styles from "./App.module.css";
 // import { ipcRenderer } from "electron";
+import { HashRouter, Routes, Route } from "react-router-dom";
+import MainPage from "./components/MainPage";
 
 function App() {
   const [accounts, setAccounts] = useState<Account[]>([]);
@@ -36,18 +38,21 @@ function App() {
   }, [accounts]);
 
   return (
-    <div>
-      <Header />
-      <div id={styles.page_section}>
-        <div id={styles.content_wrapper}>
-          <Contents />
-        </div>
-        <div>
-          <Form setAccounts={setAccounts} />
-          <AccountList accounts={accounts} />
+    <HashRouter basename="/">
+      <div>
+        <Header />
+        <div id={styles.page_section}>
+          <div id={styles.content_wrapper}>
+            <Contents />
+          </div>
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/set" element={<Form setAccounts={setAccounts} />} />
+            <Route path="/list" element={<AccountList accounts={accounts} />} />
+          </Routes>
         </div>
       </div>
-    </div>
+    </HashRouter>
   );
 }
 

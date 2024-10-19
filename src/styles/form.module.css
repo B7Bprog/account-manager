@@ -15,3 +15,7 @@ label {
 textarea {
   resize: none;
 }
+.input_field {
+  display: flex;
+  flex-direction: row;
+}

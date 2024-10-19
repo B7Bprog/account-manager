@@ -1,7 +1,16 @@
 #header {
+  position: fixed;
+  display: flex;
+  flex-direction: row;
   border-style: solid;
   border-color: white;
   border-width: 0.1rem;
   margin-top: 0rem;
   margin-bottom: 1rem;
+  align-items: center;
+}
+.headerLink {
+  margin: 2rem;
+  text-decoration: none;
+  color: white;
 }
