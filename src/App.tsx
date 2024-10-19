@@ -3,37 +3,37 @@ import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Form from "./components/Form";
 import Contents from "./components/Contents";
-import AccountList from "./components/AccountList";
+import AccountList, { Account } from "./components/AccountList";
 import styles from "./App.module.css";
-const { ipcRenderer } = require("electron");
+// import { ipcRenderer } from "electron";
 
 function App() {
-  const [tasks, setTasks] = useState([]);
+  const [accounts, setAccounts] = useState<Account[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    ipcRenderer.send("loadTasks");
+    window.ipcRenderer.send("loadAccounts");
 
-    ipcRenderer.on("loadTasksResponse", (event, data) => {
+    window.ipcRenderer.on("loadAccountsResponse", (event, data) => {
       console.log(data, "data here");
 
-      setTasks(JSON.parse(data));
+      setAccounts(JSON.parse(data));
       setIsLoaded(true);
     });
 
     return () => {
-      ipcRenderer.removeAllListeners("loadTasksResponse");
+      window.ipcRenderer.removeAllListeners("loadAccountsResponse");
     };
   }, []);
 
   useEffect(() => {
     if (isLoaded) {
-      ipcRenderer.send("saveTasks", JSON.stringify(tasks));
+      window.ipcRenderer.send("saveAccounts", JSON.stringify(accounts));
     }
     return () => {
-      ipcRenderer.removeAllListeners("loadTasksResponse");
+      window.ipcRenderer.removeAllListeners("loadAccountsResponse");
     };
-  }, [tasks]);
+  }, [accounts]);
 
   return (
     <div>
@@ -43,8 +43,8 @@ function App() {
           <Contents />
         </div>
         <div>
-          <Form setTasks={setTasks} />
-          <AccountList tasks={tasks} />
+          <Form setAccounts={setAccounts} />
+          <AccountList accounts={accounts} />
         </div>
       </div>
     </div>

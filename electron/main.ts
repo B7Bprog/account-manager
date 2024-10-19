@@ -44,7 +44,7 @@ function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, "preload.mjs"),
       nodeIntegration: true,
-      contextIsolation: false,
+      contextIsolation: true,
     },
   });
 
@@ -94,18 +94,18 @@ app.on("activate", () => {
   }
 });
 
-ipcMain.on("saveTasks", (event, content) => {
+ipcMain.on("saveAccounts", (event, content) => {
   fs.writeFile("./accounts.json", content);
 });
 
-ipcMain.on("loadTasks", (event) => {
+ipcMain.on("loadAccounts", (event) => {
   fs.readFile("./accounts.json", "utf-8")
     .then((data) => {
-      event.reply("loadTasksResponse", data);
+      event.reply("loadAccountsResponse", data);
     })
     .catch((err) => {
-      console.error("Failed to read tasks file:", err);
-      event.reply("loadTasksResponse", "[]"); // Send an empty array if there is an error
+      console.error("Failed to read accounts file:", err);
+      event.reply("loadAccountsResponse", "[]"); // Send an empty array if there is an error
     });
 });
 

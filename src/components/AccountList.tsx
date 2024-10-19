@@ -1,17 +1,65 @@
 import { FC } from "react";
 import styles from "../styles/tasklist.module.css";
 
-const AccountList: FC<{ tasks: { title: string; description: string }[] }> = ({
-  tasks,
-}) => {
+export type Account = {
+  id: string;
+  accountName: string;
+  loginUrl: string;
+  email: string;
+  username: string;
+  password: string;
+  description: string;
+  typeOf2FA: string;
+  securityQuestion: string;
+  securityAnswer: string;
+  passwordExpiry: string;
+  backupCodes: string;
+  accountStatus: string;
+};
+
+const AccountList: FC<{
+  accounts: Account[];
+}> = ({ accounts }) => {
   return (
     <div id={styles.list_area}>
       <ul>
-        {tasks.map((task: { title: string; description: string }) => {
+        {accounts.map((account: Account) => {
           return (
-            <li>
-              <h2>{task.title}</h2>
-              <p>{task.description}</p>
+            <li key={account.id}>
+              <h2>{account.accountName}</h2>
+              <p>
+                <strong>Login URL:</strong> {account.loginUrl}
+              </p>
+              <p>
+                <strong>Email:</strong> {account.email}
+              </p>
+              <p>
+                <strong>Username:</strong> {account.username}
+              </p>
+              <p>
+                <strong>Password:</strong> {account.password}
+              </p>
+              <p>
+                <strong>Description:</strong> {account.description}
+              </p>
+              <p>
+                <strong>Type of 2FA:</strong> {account.typeOf2FA}
+              </p>
+              <p>
+                <strong>Security Question:</strong> {account.securityQuestion}
+              </p>
+              <p>
+                <strong>Security Answer:</strong> {account.securityAnswer}
+              </p>
+              <p>
+                <strong>Password Expiry:</strong> {account.passwordExpiry}
+              </p>
+              <p>
+                <strong>Backup Codes:</strong> {account.backupCodes}
+              </p>
+              <p>
+                <strong>Account Status:</strong> {account.accountStatus}
+              </p>
             </li>
           );
         })}
