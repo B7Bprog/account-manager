@@ -1,5 +1,11 @@
+import styles from "../styles/contents.module.css";
+
 const Contents = () => {
-  return <h1>Contents</h1>;
+  return (
+    <div id={styles.contentsWrapper}>
+      <h1>Contents</h1>
+    </div>
+  );
 };
 
 export default Contents;

@@ -1,5 +1,5 @@
 import { FC } from "react";
-import styles from "../styles/tasklist.module.css";
+import styles from "../styles/accountlist.module.css";
 
 export type Account = {
   id: string;

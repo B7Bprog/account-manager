@@ -39,7 +39,7 @@ function createWindow() {
   win = new BrowserWindow({
     width: width * scaleFactor,
     height: height * scaleFactor,
-
+    frame: true,
     icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
     webPreferences: {
       preload: path.join(__dirname, "preload.mjs"),
@@ -107,6 +107,12 @@ ipcMain.on("loadAccounts", (event) => {
       console.error("Failed to read accounts file:", err);
       event.reply("loadAccountsResponse", "[]"); // Send an empty array if there is an error
     });
+});
+
+ipcMain.on("close-app", () => {
+  if (win) {
+    win.close();
+  }
 });
 
 app.whenReady().then(createWindow);

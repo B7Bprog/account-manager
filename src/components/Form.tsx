@@ -55,107 +55,108 @@ const Form: FC<{
 
   return (
     <form onSubmit={(e) => handleSubmit(e)}>
-      <div className={styles.input_field}>
-        <label>Account Name:</label>
-        <input
-          value={accountName}
-          onChange={(e) => setAccountName(e.target.value)}
-          placeholder="Enter account name"
-        />
-      </div>
+      <div id={styles.account_form}>
+        <div className={styles.input_field}>
+          <label>Account Name:</label>
+          <input
+            value={accountName}
+            onChange={(e) => setAccountName(e.target.value)}
+            placeholder="Enter account name"
+          />
+        </div>
 
-      <div className={styles.input_field}>
-        <label>Login URL:</label>
-        <input
-          value={loginUrl}
-          onChange={(e) => setLoginUrl(e.target.value)}
-          placeholder="Enter login URL"
-        />
-      </div>
+        <div className={styles.input_field}>
+          <label>Login URL:</label>
+          <input
+            value={loginUrl}
+            onChange={(e) => setLoginUrl(e.target.value)}
+            placeholder="Enter login URL"
+          />
+        </div>
 
-      <div className={styles.input_field}>
-        <label>Email:</label>
-        <input
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter email address"
-        />
-      </div>
+        <div className={styles.input_field}>
+          <label>Email:</label>
+          <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter email address"
+          />
+        </div>
 
-      <div className={styles.input_field}>
-        <label>Username:</label>
-        <input
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Enter username"
-        />
-      </div>
+        <div className={styles.input_field}>
+          <label>Username:</label>
+          <input
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Enter username"
+          />
+        </div>
 
-      <div className={styles.input_field}>
-        <label>Password:</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter password"
-        />
-      </div>
+        <div className={styles.input_field}>
+          <label>Password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter password"
+          />
+        </div>
 
-      <div className={styles.input_field}>
-        <label>Type of 2FA:</label>
-        <input
-          value={typeOf2FA}
-          onChange={(e) => setTypeOf2FA(e.target.value)}
-          placeholder="Enter type of 2FA (e.g. SMS, App)"
-        />
-      </div>
+        <div className={styles.input_field}>
+          <label>Type of 2FA:</label>
+          <input
+            value={typeOf2FA}
+            onChange={(e) => setTypeOf2FA(e.target.value)}
+            placeholder="Enter type of 2FA (e.g. SMS, App)"
+          />
+        </div>
 
-      <div className={styles.input_field}>
-        <label>Security Question:</label>
-        <input
-          value={securityQuestion}
-          onChange={(e) => setSecurityQuestion(e.target.value)}
-          placeholder="Enter security question"
-        />
-      </div>
+        <div className={styles.input_field}>
+          <label>Security Question:</label>
+          <input
+            value={securityQuestion}
+            onChange={(e) => setSecurityQuestion(e.target.value)}
+            placeholder="Enter security question"
+          />
+        </div>
 
-      <div className={styles.input_field}>
-        <label>Security Answer:</label>
-        <input
-          value={securityAnswer}
-          onChange={(e) => setSecurityAnswer(e.target.value)}
-          placeholder="Enter answer to security question"
-        />
-      </div>
+        <div className={styles.input_field}>
+          <label>Security Answer:</label>
+          <input
+            value={securityAnswer}
+            onChange={(e) => setSecurityAnswer(e.target.value)}
+            placeholder="Enter answer to security question"
+          />
+        </div>
 
-      <div className={styles.input_field}>
-        <label>Password Expiry:</label>
-        <input
-          type="date"
-          value={passwordExpiry}
-          onChange={(e) => setPasswordExpiry(e.target.value)}
-          placeholder="Enter password expiry date"
-        />
-      </div>
+        <div className={styles.input_field}>
+          <label>Password Expiry:</label>
+          <input
+            type="date"
+            value={passwordExpiry}
+            onChange={(e) => setPasswordExpiry(e.target.value)}
+            placeholder="Enter password expiry date"
+          />
+        </div>
 
-      <div className={styles.input_field}>
-        <label>Backup Codes:</label>
-        <textarea
-          value={backupCodes}
-          onChange={(e) => setBackupCodes(e.target.value)}
-          placeholder="Enter backup codes"
-        />
-      </div>
+        <div className={styles.input_field}>
+          <label>Backup Codes:</label>
+          <textarea
+            value={backupCodes}
+            onChange={(e) => setBackupCodes(e.target.value)}
+            placeholder="Enter backup codes"
+          />
+        </div>
 
-      <div className={styles.input_field}>
-        <label>Account Status:</label>
-        <input
-          value={accountStatus}
-          onChange={(e) => setAccountStatus(e.target.value)}
-          placeholder="Enter account status (e.g. active, inactive)"
-        />
+        <div className={styles.input_field}>
+          <label>Account Status:</label>
+          <input
+            value={accountStatus}
+            onChange={(e) => setAccountStatus(e.target.value)}
+            placeholder="Enter account status (e.g. active, inactive)"
+          />
+        </div>
       </div>
-
       <div id={styles.description_input}>
         <label>Description:</label>
         <textarea

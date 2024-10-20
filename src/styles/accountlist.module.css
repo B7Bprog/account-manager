@@ -5,4 +5,11 @@
   display: flex;
   overflow-y: auto;
   height: 60vh;
+  width: 100%;
+}
+ul {
+  list-style-type: none;
+}
+li {
+  padding: 2rem;
 }

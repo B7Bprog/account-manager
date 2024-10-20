@@ -18,4 +18,11 @@ textarea {
 .input_field {
   display: flex;
   flex-direction: row;
+  align-items: center;
+}
+#account_form {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 8rem;
+  padding-left: 3rem;
 }

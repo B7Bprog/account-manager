@@ -8,9 +8,16 @@
   margin-top: 0rem;
   margin-bottom: 1rem;
   align-items: center;
+  padding: 1rem;
+  width: 100%;
 }
 .headerLink {
-  margin: 2rem;
+  margin-left: 2rem;
   text-decoration: none;
   color: white;
+}
+
+#exit {
+  margin-left: 35rem;
+  cursor: pointer;
 }
