@@ -25,7 +25,7 @@ const AccountList: FC<{
       <ul>
         {accounts.map((account: Account) => {
           return (
-            <li key={account.id}>
+            <li className={styles.accountListItems} key={account.id}>
               <h2>{account.accountName}</h2>
               <p>
                 <strong>Login URL:</strong> {account.loginUrl}

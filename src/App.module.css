@@ -1,23 +1,28 @@
 #page_section {
   padding-top: 5rem;
+
   display: flex;
   flex-direction: row;
+
   border-style: solid;
-  border-color: rgb(137, 0, 0);
-  border-width: 0.1rem;
+  border-color: rgb(74, 74, 74);
+  border-width: 0.2rem;
+  border-radius: 0.7rem;
+  height: 42.9rem;
 }
 
-#content_wrapper {
-  border-style: solid;
-  border-color: rgb(137, 0, 0);
-  border-width: 0.1rem;
-  height: 80vh;
-}
-
-#main_area {
+.main_area {
   border-style: solid;
   border-color: rgb(41, 137, 0);
   border-width: 0.1rem;
   display: flex;
-  height: 80vh;
+  height: 36.5rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  border-style: solid;
+  border-color: rgb(74, 74, 74);
+  border-width: 0.2rem;
+  border-radius: 0.7rem;
+  overflow-y: auto;
+  width: 100%;
 }

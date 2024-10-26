@@ -8,6 +8,7 @@ import styles from "./App.module.css";
 // import { ipcRenderer } from "electron";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import MainPage from "./components/MainPage";
+import SingleAccount from "./components/SingleAccount";
 
 function App() {
   const [accounts, setAccounts] = useState<Account[]>([]);
@@ -30,7 +31,10 @@ function App() {
 
   useEffect(() => {
     if (isLoaded) {
-      window.ipcRenderer.send("saveAccounts", JSON.stringify(accounts));
+      window.ipcRenderer.send(
+        "saveAccounts",
+        JSON.stringify(accounts, null, 2)
+      );
     }
     return () => {
       window.ipcRenderer.removeAllListeners("loadAccountsResponse");
@@ -45,11 +49,20 @@ function App() {
           <div id={styles.content_wrapper}>
             <Contents accounts={accounts} />
           </div>
-          <Routes>
-            <Route path="/" element={<MainPage />} />
-            <Route path="/set" element={<Form setAccounts={setAccounts} />} />
-            <Route path="/list" element={<AccountList accounts={accounts} />} />
-          </Routes>
+          <div className={styles.main_area}>
+            <Routes>
+              <Route path="/" element={<MainPage />} />
+              <Route path="/set" element={<Form setAccounts={setAccounts} />} />
+              <Route
+                path="/list"
+                element={<AccountList accounts={accounts} />}
+              />
+              <Route
+                path="/single/:accountId"
+                element={<SingleAccount accounts={accounts} />}
+              />
+            </Routes>
+          </div>
         </div>
       </div>
     </HashRouter>

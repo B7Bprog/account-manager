@@ -19,6 +19,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+a {
+  text-decoration: none;
+  color: white;
+}
+
 /* body {
   margin: 0;
   display: flex;
