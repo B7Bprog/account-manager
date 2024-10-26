@@ -94,7 +94,7 @@ app.on("activate", () => {
   }
 });
 
-ipcMain.on("saveAccounts", (event, content) => {
+ipcMain.on("saveAccounts", (_event, content) => {
   fs.writeFile("./accounts.json", content);
 });
 

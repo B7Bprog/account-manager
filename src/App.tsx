@@ -16,7 +16,7 @@ function App() {
   useEffect(() => {
     window.ipcRenderer.send("loadAccounts");
 
-    window.ipcRenderer.on("loadAccountsResponse", (event, data) => {
+    window.ipcRenderer.on("loadAccountsResponse", (_event, data) => {
       console.log(data, "data here");
 
       setAccounts(JSON.parse(data));
@@ -43,7 +43,7 @@ function App() {
         <Header />
         <div id={styles.page_section}>
           <div id={styles.content_wrapper}>
-            <Contents />
+            <Contents accounts={accounts} />
           </div>
           <Routes>
             <Route path="/" element={<MainPage />} />
