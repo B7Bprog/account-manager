@@ -13,7 +13,9 @@ const SingleAccount: FC<{ accounts: Account[] }> = ({ accounts }) => {
     <div className={styles.accountListItem}>
       {currentAccount ? (
         <div>
-          <h2>{currentAccount.accountName}</h2>
+          <div className={styles.single_account_title}>
+            <h2>{currentAccount.accountName}</h2>
+          </div>
           <p>
             <strong>Login URL:</strong> {currentAccount.loginUrl}
           </p>
@@ -26,28 +28,53 @@ const SingleAccount: FC<{ accounts: Account[] }> = ({ accounts }) => {
           <p>
             <strong>Password:</strong> {currentAccount.password}
           </p>
-          <p>
-            <strong>Description:</strong> {currentAccount.description}
-          </p>
-          <p>
-            <strong>Type of 2FA:</strong> {currentAccount.typeOf2FA}
-          </p>
-          <p>
-            <strong>Security Question:</strong>{" "}
-            {currentAccount.securityQuestion}
-          </p>
-          <p>
-            <strong>Security Answer:</strong> {currentAccount.securityAnswer}
-          </p>
+
           <p>
             <strong>Password Expiry:</strong> {currentAccount.passwordExpiry}
           </p>
           <p>
-            <strong>Backup Codes:</strong> {currentAccount.backupCodes}
+            <strong>Type of 2FA:</strong> {currentAccount.typeOf2FA}
           </p>
+
           <p>
             <strong>Account Status:</strong> {currentAccount.accountStatus}
           </p>
+
+          <div className={styles.description_wrapper}>
+            <p>
+              <strong>Description:</strong>
+            </p>
+            <div className={styles.description_box}>
+              <p>{currentAccount.description}</p>
+            </div>
+          </div>
+
+          <div className={styles.security_wrapper}>
+            <p>
+              <strong>Security Question:</strong>
+            </p>
+            <div className={styles.security_box}>
+              <p>{currentAccount.securityQuestion}</p>
+            </div>
+          </div>
+          <div className={styles.security_answer_wrapper}>
+            <p>
+              <strong>Security Answer:</strong>
+            </p>
+
+            <div className={styles.security_answer_box}>
+              <p>{currentAccount.securityAnswer}</p>
+            </div>
+          </div>
+
+          <div className={styles.backup_codes_wrapper}>
+            <p>
+              <strong>Backup Codes:</strong>
+            </p>
+            <div className={styles.backup_codes_box}>
+              <p>{currentAccount.backupCodes}</p>
+            </div>
+          </div>
         </div>
       ) : (
         <h2>No account found</h2>

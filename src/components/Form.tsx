@@ -21,36 +21,25 @@ const Form: FC<{
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+
     setAccounts((accounts: Account[]) => {
       const newAccount: Account = {
         id: uuidv1(),
-        accountName: accountName,
-        loginUrl: loginUrl,
-        email: email,
-        username: username,
-        password: password,
-        description: description,
-        typeOf2FA: typeOf2FA,
-        securityQuestion: securityQuestion,
-        securityAnswer: securityAnswer,
-        passwordExpiry: passwordExpiry,
-        backupCodes: backupCodes,
-        accountStatus: accountStatus,
+        accountName: accountName ? accountName : "N/A",
+        loginUrl: loginUrl ? loginUrl : "N/A",
+        email: email ? email : "N/A",
+        username: username ? username : "N/A",
+        password: password ? password : "N/A",
+        description: description ? description : "N/A",
+        typeOf2FA: typeOf2FA ? typeOf2FA : "N/A",
+        securityQuestion: securityQuestion ? securityQuestion : "N/A",
+        securityAnswer: securityAnswer ? securityAnswer : "N/A",
+        passwordExpiry: passwordExpiry ? passwordExpiry : "N/A",
+        backupCodes: backupCodes ? backupCodes : "N/A",
+        accountStatus: accountStatus ? accountStatus : "N/A",
       };
       return [newAccount, ...accounts];
     });
-    setAccountName("N/A");
-    setLoginUrl("N/A");
-    setEmail("N/A");
-    setUsername("N/A");
-    setPassword("N/A");
-    setDescription("N/A");
-    setTypeOf2FA("N/A");
-    setSecurityQuestion("N/A");
-    setSecurityAnswer("N/A");
-    setPasswordExpiry("N/A");
-    setBackupCodes("N/A");
-    setAccountStatus("N/A");
   };
 
   return (
@@ -60,6 +49,7 @@ const Form: FC<{
           <label>Account Name:</label>
           <input
             value={accountName}
+            maxLength={80}
             onChange={(e) => setAccountName(e.target.value)}
             placeholder="Enter account name"
           />
@@ -78,6 +68,7 @@ const Form: FC<{
           <label>Email:</label>
           <input
             value={email}
+            maxLength={80}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter email address"
           />
@@ -87,6 +78,7 @@ const Form: FC<{
           <label>Username:</label>
           <input
             value={username}
+            maxLength={80}
             onChange={(e) => setUsername(e.target.value)}
             placeholder="Enter username"
           />
@@ -97,6 +89,7 @@ const Form: FC<{
           <input
             type="password"
             value={password}
+            maxLength={80}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter password"
           />
@@ -106,6 +99,7 @@ const Form: FC<{
           <label>Type of 2FA:</label>
           <input
             value={typeOf2FA}
+            maxLength={80}
             onChange={(e) => setTypeOf2FA(e.target.value)}
             placeholder="Enter type of 2FA (e.g. SMS, App)"
           />
@@ -113,7 +107,7 @@ const Form: FC<{
 
         <div className={styles.input_field}>
           <label>Security Question:</label>
-          <input
+          <textarea
             value={securityQuestion}
             onChange={(e) => setSecurityQuestion(e.target.value)}
             placeholder="Enter security question"
@@ -122,7 +116,7 @@ const Form: FC<{
 
         <div className={styles.input_field}>
           <label>Security Answer:</label>
-          <input
+          <textarea
             value={securityAnswer}
             onChange={(e) => setSecurityAnswer(e.target.value)}
             placeholder="Enter answer to security question"
@@ -152,6 +146,7 @@ const Form: FC<{
           <label>Account Status:</label>
           <input
             value={accountStatus}
+            maxLength={80}
             onChange={(e) => setAccountStatus(e.target.value)}
             placeholder="Enter account status (e.g. active, inactive)"
           />

@@ -43,7 +43,7 @@ function App() {
 
   return (
     <HashRouter basename="/">
-      <div>
+      <div className={styles.full_page}>
         <Header />
         <div id={styles.page_section}>
           <div id={styles.content_wrapper}>
@@ -63,6 +63,9 @@ function App() {
               />
             </Routes>
           </div>
+        </div>
+        <div className={styles.copyright}>
+          <p> Copyright © 2024 - Bela Bertalan</p>
         </div>
       </div>
     </HashRouter>

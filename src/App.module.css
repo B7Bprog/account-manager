@@ -4,17 +4,26 @@
   display: flex;
   flex-direction: row;
 
+  height: 41.5rem;
+}
+
+.full_page {
   border-style: solid;
   border-color: rgb(74, 74, 74);
   border-width: 0.2rem;
-  border-radius: 0.7rem;
-  height: 42.9rem;
+  border-radius: 0.5rem;
+}
+
+.copyright {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding-right: 2rem;
+  font-size: 0.7rem;
+  color: rgb(140, 140, 140);
 }
 
 .main_area {
-  border-style: solid;
-  border-color: rgb(41, 137, 0);
-  border-width: 0.1rem;
   display: flex;
   height: 36.5rem;
   margin-left: 1rem;
@@ -22,7 +31,7 @@
   border-style: solid;
   border-color: rgb(74, 74, 74);
   border-width: 0.2rem;
-  border-radius: 0.7rem;
+  border-radius: 0.5rem;
   overflow-y: auto;
   width: 100%;
 }
