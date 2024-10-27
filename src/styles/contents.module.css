@@ -31,3 +31,16 @@
 .account_name:hover {
   color: rgb(255, 255, 255);
 }
+.sort_wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+.sort_button {
+  padding: 0.2rem;
+}
+#sortby_text {
+  margin-top: 0.2rem;
+}

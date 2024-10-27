@@ -1,7 +1,8 @@
-import { FC, FormEvent, useState } from "react";
+import { FC, FormEvent, useEffect, useState } from "react";
 import styles from "../styles/form.module.css";
 import { v1 as uuidv1 } from "uuid";
 import { Account } from "./AccountList";
+import CryptoJS from "crypto-js";
 
 const Form: FC<{
   setAccounts: React.Dispatch<React.SetStateAction<Account[]>>;
@@ -23,6 +24,10 @@ const Form: FC<{
   const [newAccountAdded, setNewAccountAdded] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [pwPromptActive, setPwPromptActive] = useState(false);
+  const [pwMessage, setPwMessage] = useState("");
+  const [input, setInput] = useState("");
+  const [pwHash, setPwHash] = useState("");
 
   const resetFormFields = () => {
     setAccountName("");
@@ -45,46 +50,121 @@ const Form: FC<{
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+
     if (accountName === "") {
       setMessage("Account name cannot be empty!");
       setTimeout(() => {
         setMessage("");
       }, 3500);
     } else {
-      try {
-        setAccounts((accounts: Account[]) => {
-          const newAccount: Account = {
-            id: uuidv1(),
-            accountName: accountName ? accountName : "N/A",
-            loginUrl: loginUrl ? loginUrl : "N/A",
-            email: email ? email : "N/A",
-            username: username ? username : "N/A",
-            password: password ? password : "N/A",
-            description: description ? description : "N/A",
-            typeOf2FA: typeOf2FA ? typeOf2FA : "N/A",
-            securityQuestion: securityQuestion ? securityQuestion : "N/A",
-            securityAnswer: securityAnswer ? securityAnswer : "N/A",
-            passwordExpiry: passwordExpiry ? passwordExpiry : "N/A",
-            backupCodes: backupCodes ? backupCodes : "N/A",
-            accountStatus: accountStatus ? accountStatus : "N/A",
-            createdAt: formattedDate,
-          };
-          return [newAccount, ...accounts];
-        });
-        setNewAccountAdded(true);
-        setTimeout(() => {
-          setNewAccountAdded(false);
-          resetFormFields();
-        }, 2500);
-      } catch {
-        setNewAccountAdded(false);
-        setError("Something wen't wrong! Account NOT saved.");
+      if (!pwPromptActive) {
+        setPwMessage("Enter Password:");
       }
+    }
+  };
+
+  function encryptAccountData(account: Account, key: string): Partial<Account> {
+    const encryptedAccount: Partial<Account> = {};
+
+    for (const [field, value] of Object.entries(account)) {
+      if (
+        typeof value === "string" &&
+        field !== "id" &&
+        field !== "accountName" &&
+        value !== "N/A"
+      ) {
+        encryptedAccount[field as keyof Account] = CryptoJS.AES.encrypt(
+          value,
+          key
+        ).toString();
+      } else {
+        encryptedAccount[field as keyof Account] = value;
+      }
+    }
+
+    return encryptedAccount;
+  }
+
+  useEffect(() => {
+    if (pwHash) setInput("");
+  }, [pwHash]);
+
+  const handleInputClick = () => {
+    setPwHash(CryptoJS.SHA256(input).toString());
+
+    try {
+      setAccounts((accounts: Account[]) => {
+        const encryptedAccount = encryptAccountData(
+          {
+            id: uuidv1(),
+            accountName: accountName || "N/A",
+            loginUrl: loginUrl || "N/A",
+            email: email || "N/A",
+            username: username || "N/A",
+            password: password || "N/A",
+            description: description || "N/A",
+            typeOf2FA: typeOf2FA || "N/A",
+            securityQuestion: securityQuestion || "N/A",
+            securityAnswer: securityAnswer || "N/A",
+            passwordExpiry: passwordExpiry || "N/A",
+            backupCodes: backupCodes || "N/A",
+            accountStatus: accountStatus || "N/A",
+            createdAt: formattedDate,
+          },
+          pwHash
+        );
+
+        const newAccount: Account = {
+          ...encryptedAccount,
+          id: uuidv1(),
+          accountName: encryptedAccount.accountName || "N/A",
+          loginUrl: encryptedAccount.loginUrl || "N/A",
+          email: encryptedAccount.email || "N/A",
+          username: encryptedAccount.username || "N/A",
+          password: encryptedAccount.password || "N/A",
+          description: encryptedAccount.description || "N/A",
+          typeOf2FA: encryptedAccount.typeOf2FA || "N/A",
+          securityQuestion: encryptedAccount.securityQuestion || "N/A",
+          securityAnswer: encryptedAccount.securityAnswer || "N/A",
+          passwordExpiry: encryptedAccount.passwordExpiry || "N/A",
+          backupCodes: encryptedAccount.backupCodes || "N/A",
+          accountStatus: encryptedAccount.accountStatus || "N/A",
+          createdAt: formattedDate,
+        };
+
+        return [newAccount, ...accounts];
+      });
+      setNewAccountAdded(true);
+      setTimeout(() => {
+        setNewAccountAdded(false);
+        resetFormFields();
+      }, 2500);
+      setPwMessage("");
+      setPwPromptActive(false);
+    } catch {
+      setNewAccountAdded(false);
+      setError("Something wen't wrong! Account NOT saved.");
     }
   };
 
   if (newAccountAdded) {
     return <h2>Account has been saved</h2>;
+  }
+
+  if (pwMessage) {
+    return (
+      <div>
+        <h2>{pwMessage}</h2>
+        <input type="password" onChange={(e) => setInput}></input>
+        <button
+          onClick={() => {
+            handleInputClick();
+          }}
+        >
+          Enter
+        </button>
+      </div>
+    );
   }
 
   if (error) {

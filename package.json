@@ -14,6 +14,7 @@
     "make": "tsc && vite build --outDir=dist && electron-forge make"
   },
   "dependencies": {
+    "crypto-js": "^4.2.0",
     "fs.promises": "^0.1.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -26,6 +27,7 @@
     "@electron-forge/maker-rpm": "^6.2.1",
     "@electron-forge/maker-squirrel": "^6.2.1",
     "@electron-forge/maker-zip": "^6.2.1",
+    "@types/crypto-js": "^4.2.2",
     "@types/react": "^18.2.64",
     "@types/react-dom": "^18.2.21",
     "@types/uuid": "^10.0.0",
