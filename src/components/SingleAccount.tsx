@@ -78,6 +78,9 @@ const SingleAccount: FC<{
           <p>
             <strong>Account Status:</strong> {currentAccount.accountStatus}
           </p>
+          <p>
+            <strong>Created At:</strong> {currentAccount.createdAt}
+          </p>
 
           <div className={styles.description_wrapper}>
             <p>

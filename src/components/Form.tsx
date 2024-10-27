@@ -18,6 +18,7 @@ const Form: FC<{
   const [passwordExpiry, setPasswordExpiry] = useState("");
   const [backupCodes, setBackupCodes] = useState("");
   const [accountStatus, setAccountStatus] = useState("");
+  const [createdAt, setCreatedAt] = useState("");
 
   const [newAccountAdded, setNewAccountAdded] = useState(false);
   const [error, setError] = useState("");
@@ -36,7 +37,11 @@ const Form: FC<{
     setPasswordExpiry("");
     setBackupCodes("");
     setAccountStatus("");
+    setCreatedAt("");
   };
+
+  const currentDate = new Date();
+  const formattedDate = currentDate.toISOString().split("T")[0];
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -62,6 +67,7 @@ const Form: FC<{
             passwordExpiry: passwordExpiry ? passwordExpiry : "N/A",
             backupCodes: backupCodes ? backupCodes : "N/A",
             accountStatus: accountStatus ? accountStatus : "N/A",
+            createdAt: formattedDate,
           };
           return [newAccount, ...accounts];
         });

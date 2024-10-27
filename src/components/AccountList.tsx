@@ -15,6 +15,7 @@ export type Account = {
   passwordExpiry: string;
   backupCodes: string;
   accountStatus: string;
+  createdAt: string;
 };
 
 const AccountList: FC<{
@@ -59,6 +60,9 @@ const AccountList: FC<{
               </p>
               <p>
                 <strong>Account Status:</strong> {account.accountStatus}
+              </p>
+              <p>
+                <strong>Created At:</strong> {account.createdAt}
               </p>
             </li>
           );
