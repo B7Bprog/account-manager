@@ -45,7 +45,7 @@ const Form: FC<{
   return (
     <form onSubmit={(e) => handleSubmit(e)}>
       <div id={styles.account_form}>
-        <div className={styles.input_field}>
+        <div className={styles.input_wrapper}>
           <label>Account Name:</label>
           <input
             value={accountName}
@@ -55,7 +55,7 @@ const Form: FC<{
           />
         </div>
 
-        <div className={styles.input_field}>
+        <div className={styles.input_wrapper}>
           <label>Login URL:</label>
           <input
             value={loginUrl}
@@ -64,7 +64,7 @@ const Form: FC<{
           />
         </div>
 
-        <div className={styles.input_field}>
+        <div className={styles.input_wrapper}>
           <label>Email:</label>
           <input
             value={email}
@@ -74,7 +74,7 @@ const Form: FC<{
           />
         </div>
 
-        <div className={styles.input_field}>
+        <div className={styles.input_wrapper}>
           <label>Username:</label>
           <input
             value={username}
@@ -84,7 +84,7 @@ const Form: FC<{
           />
         </div>
 
-        <div className={styles.input_field}>
+        <div className={styles.input_wrapper}>
           <label>Password:</label>
           <input
             type="password"
@@ -95,7 +95,7 @@ const Form: FC<{
           />
         </div>
 
-        <div className={styles.input_field}>
+        <div className={styles.input_wrapper}>
           <label>Type of 2FA:</label>
           <input
             value={typeOf2FA}
@@ -105,7 +105,7 @@ const Form: FC<{
           />
         </div>
 
-        <div className={styles.input_field}>
+        <div className={styles.input_wrapper}>
           <label>Security Question:</label>
           <textarea
             value={securityQuestion}
@@ -114,7 +114,7 @@ const Form: FC<{
           />
         </div>
 
-        <div className={styles.input_field}>
+        <div className={styles.input_wrapper}>
           <label>Security Answer:</label>
           <textarea
             value={securityAnswer}
@@ -123,7 +123,7 @@ const Form: FC<{
           />
         </div>
 
-        <div className={styles.input_field}>
+        <div className={styles.input_wrapper}>
           <label>Password Expiry:</label>
           <input
             type="date"
@@ -133,7 +133,7 @@ const Form: FC<{
           />
         </div>
 
-        <div className={styles.input_field}>
+        <div className={styles.input_wrapper}>
           <label>Backup Codes:</label>
           <textarea
             value={backupCodes}
@@ -142,7 +142,7 @@ const Form: FC<{
           />
         </div>
 
-        <div className={styles.input_field}>
+        <div className={styles.input_wrapper}>
           <label>Account Status:</label>
           <input
             value={accountStatus}
@@ -152,16 +152,18 @@ const Form: FC<{
           />
         </div>
       </div>
-      <div id={styles.description_input}>
+      <div id={styles.description_wrapper}>
         <label>Description:</label>
         <textarea
+          id={styles.description_text_area}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Enter a description for the account"
         />
       </div>
-
-      <button type="submit">Save Account</button>
+      <div id={styles.save_button}>
+        <button type="submit">Save Account</button>
+      </div>
     </form>
   );
 };
