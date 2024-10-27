@@ -12,6 +12,7 @@ textarea {
   resize: none;
   width: 17.4rem;
   padding-left: 0.3rem;
+  font-size: 1rem;
 }
 .input_wrapper {
   /* display: flex;
@@ -61,6 +62,7 @@ label {
 }
 input {
   height: 2rem;
+  font-size: 1rem;
 }
 
 #description_wrapper label {
@@ -69,9 +71,13 @@ input {
 }
 #save_button {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   margin-top: 1.3rem;
 }
 input {
   padding-left: 0.3rem;
+}
+#message {
+  color: rgb(176, 0, 0);
 }

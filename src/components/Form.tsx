@@ -20,7 +20,8 @@ const Form: FC<{
   const [accountStatus, setAccountStatus] = useState("");
 
   const [newAccountAdded, setNewAccountAdded] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
 
   const resetFormFields = () => {
     setAccountName("");
@@ -39,33 +40,40 @@ const Form: FC<{
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    try {
-      setAccounts((accounts: Account[]) => {
-        const newAccount: Account = {
-          id: uuidv1(),
-          accountName: accountName ? accountName : "N/A",
-          loginUrl: loginUrl ? loginUrl : "N/A",
-          email: email ? email : "N/A",
-          username: username ? username : "N/A",
-          password: password ? password : "N/A",
-          description: description ? description : "N/A",
-          typeOf2FA: typeOf2FA ? typeOf2FA : "N/A",
-          securityQuestion: securityQuestion ? securityQuestion : "N/A",
-          securityAnswer: securityAnswer ? securityAnswer : "N/A",
-          passwordExpiry: passwordExpiry ? passwordExpiry : "N/A",
-          backupCodes: backupCodes ? backupCodes : "N/A",
-          accountStatus: accountStatus ? accountStatus : "N/A",
-        };
-        return [newAccount, ...accounts];
-      });
-      setNewAccountAdded(true);
+    if (accountName === "") {
+      setMessage("Account name cannot be empty!");
       setTimeout(() => {
+        setMessage("");
+      }, 3500);
+    } else {
+      try {
+        setAccounts((accounts: Account[]) => {
+          const newAccount: Account = {
+            id: uuidv1(),
+            accountName: accountName ? accountName : "N/A",
+            loginUrl: loginUrl ? loginUrl : "N/A",
+            email: email ? email : "N/A",
+            username: username ? username : "N/A",
+            password: password ? password : "N/A",
+            description: description ? description : "N/A",
+            typeOf2FA: typeOf2FA ? typeOf2FA : "N/A",
+            securityQuestion: securityQuestion ? securityQuestion : "N/A",
+            securityAnswer: securityAnswer ? securityAnswer : "N/A",
+            passwordExpiry: passwordExpiry ? passwordExpiry : "N/A",
+            backupCodes: backupCodes ? backupCodes : "N/A",
+            accountStatus: accountStatus ? accountStatus : "N/A",
+          };
+          return [newAccount, ...accounts];
+        });
+        setNewAccountAdded(true);
+        setTimeout(() => {
+          setNewAccountAdded(false);
+          resetFormFields();
+        }, 2500);
+      } catch {
         setNewAccountAdded(false);
-        resetFormFields();
-      }, 2500);
-    } catch {
-      setNewAccountAdded(false);
-      setError(true);
+        setError("Something wen't wrong! Account NOT saved.");
+      }
     }
   };
 
@@ -74,7 +82,7 @@ const Form: FC<{
   }
 
   if (error) {
-    return <h2>Something wen't wrong! Account NOT saved.</h2>;
+    return <h2>{error}</h2>;
   }
 
   return (
@@ -94,6 +102,7 @@ const Form: FC<{
           <label>Login URL:</label>
           <input
             value={loginUrl}
+            maxLength={2000}
             onChange={(e) => setLoginUrl(e.target.value)}
             placeholder="Enter login URL"
           />
@@ -144,6 +153,7 @@ const Form: FC<{
           <label>Security Question:</label>
           <textarea
             value={securityQuestion}
+            maxLength={1000}
             onChange={(e) => setSecurityQuestion(e.target.value)}
             placeholder="Enter security question"
           />
@@ -153,6 +163,7 @@ const Form: FC<{
           <label>Security Answer:</label>
           <textarea
             value={securityAnswer}
+            maxLength={1000}
             onChange={(e) => setSecurityAnswer(e.target.value)}
             placeholder="Enter answer to security question"
           />
@@ -163,6 +174,7 @@ const Form: FC<{
           <input
             type="date"
             value={passwordExpiry}
+            maxLength={80}
             onChange={(e) => setPasswordExpiry(e.target.value)}
             placeholder="Enter password expiry date"
           />
@@ -172,6 +184,7 @@ const Form: FC<{
           <label>Backup Codes:</label>
           <textarea
             value={backupCodes}
+            maxLength={1000}
             onChange={(e) => setBackupCodes(e.target.value)}
             placeholder="Enter backup codes"
           />
@@ -192,12 +205,14 @@ const Form: FC<{
         <textarea
           id={styles.description_text_area}
           value={description}
+          maxLength={5000}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Enter a description for the account"
         />
       </div>
       <div id={styles.save_button}>
         <button type="submit">Save Account</button>
+        <h2 id={styles.message}>{message}</h2>
       </div>
     </form>
   );
