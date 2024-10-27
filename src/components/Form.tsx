@@ -19,28 +19,63 @@ const Form: FC<{
   const [backupCodes, setBackupCodes] = useState("");
   const [accountStatus, setAccountStatus] = useState("");
 
+  const [newAccountAdded, setNewAccountAdded] = useState(false);
+  const [error, setError] = useState(false);
+
+  const resetFormFields = () => {
+    setAccountName("");
+    setLoginUrl("");
+    setEmail("");
+    setUsername("");
+    setPassword("");
+    setDescription("");
+    setTypeOf2FA("");
+    setSecurityQuestion("");
+    setSecurityAnswer("");
+    setPasswordExpiry("");
+    setBackupCodes("");
+    setAccountStatus("");
+  };
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-
-    setAccounts((accounts: Account[]) => {
-      const newAccount: Account = {
-        id: uuidv1(),
-        accountName: accountName ? accountName : "N/A",
-        loginUrl: loginUrl ? loginUrl : "N/A",
-        email: email ? email : "N/A",
-        username: username ? username : "N/A",
-        password: password ? password : "N/A",
-        description: description ? description : "N/A",
-        typeOf2FA: typeOf2FA ? typeOf2FA : "N/A",
-        securityQuestion: securityQuestion ? securityQuestion : "N/A",
-        securityAnswer: securityAnswer ? securityAnswer : "N/A",
-        passwordExpiry: passwordExpiry ? passwordExpiry : "N/A",
-        backupCodes: backupCodes ? backupCodes : "N/A",
-        accountStatus: accountStatus ? accountStatus : "N/A",
-      };
-      return [newAccount, ...accounts];
-    });
+    try {
+      setAccounts((accounts: Account[]) => {
+        const newAccount: Account = {
+          id: uuidv1(),
+          accountName: accountName ? accountName : "N/A",
+          loginUrl: loginUrl ? loginUrl : "N/A",
+          email: email ? email : "N/A",
+          username: username ? username : "N/A",
+          password: password ? password : "N/A",
+          description: description ? description : "N/A",
+          typeOf2FA: typeOf2FA ? typeOf2FA : "N/A",
+          securityQuestion: securityQuestion ? securityQuestion : "N/A",
+          securityAnswer: securityAnswer ? securityAnswer : "N/A",
+          passwordExpiry: passwordExpiry ? passwordExpiry : "N/A",
+          backupCodes: backupCodes ? backupCodes : "N/A",
+          accountStatus: accountStatus ? accountStatus : "N/A",
+        };
+        return [newAccount, ...accounts];
+      });
+      setNewAccountAdded(true);
+      setTimeout(() => {
+        setNewAccountAdded(false);
+        resetFormFields();
+      }, 2500);
+    } catch {
+      setNewAccountAdded(false);
+      setError(true);
+    }
   };
+
+  if (newAccountAdded) {
+    return <h2>Account has been saved</h2>;
+  }
+
+  if (error) {
+    return <h2>Something wen't wrong! Account NOT saved.</h2>;
+  }
 
   return (
     <form onSubmit={(e) => handleSubmit(e)}>
