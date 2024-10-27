@@ -106,3 +106,12 @@ strong {
   padding-right: 0.5rem;
   white-space: nowrap;
 }
+#delete_button_wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+#delete_account_button:hover {
+  border-color: #940000;
+}

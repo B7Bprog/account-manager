@@ -59,7 +59,12 @@ function App() {
               />
               <Route
                 path="/single/:accountId"
-                element={<SingleAccount accounts={accounts} />}
+                element={
+                  <SingleAccount
+                    accounts={accounts}
+                    setAccounts={setAccounts}
+                  />
+                }
               />
             </Routes>
           </div>

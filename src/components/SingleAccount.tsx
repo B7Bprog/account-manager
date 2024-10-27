@@ -3,12 +3,23 @@ import { useParams } from "react-router-dom";
 import { Account } from "./AccountList";
 import styles from "../styles/singleAccount.module.css";
 
-const SingleAccount: FC<{ accounts: Account[] }> = ({ accounts }) => {
+const SingleAccount: FC<{
+  accounts: Account[];
+  setAccounts: React.Dispatch<React.SetStateAction<Account[]>>;
+}> = ({ accounts, setAccounts }) => {
   const { accountId } = useParams<{ accountId: string }>();
   const [currentAccount, setCurrentAccount] = useState<Account>();
   useEffect(() => {
     setCurrentAccount(accounts.find((account) => account.id === accountId));
   }, [accountId, accounts]);
+
+  const handleDelete = () => {
+    setAccounts((accounts: Account[]) => {
+      return accounts.filter((account) => {
+        return account.id !== accountId;
+      });
+    });
+  };
   return (
     <div className={styles.accountListItem}>
       {currentAccount ? (
@@ -75,9 +86,14 @@ const SingleAccount: FC<{ accounts: Account[] }> = ({ accounts }) => {
               <p>{currentAccount.backupCodes}</p>
             </div>
           </div>
+          <div id={styles.delete_button_wrapper}>
+            <button id={styles.delete_account_button} onClick={handleDelete}>
+              Delete account
+            </button>
+          </div>
         </div>
       ) : (
-        <h2>No account found</h2>
+        <h2>Account does not exist</h2>
       )}
     </div>
   );
