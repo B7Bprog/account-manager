@@ -1,8 +1,9 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { Account } from "./AccountList";
 import styles from "../styles/singleAccount.module.css";
 import CryptoJS from "crypto-js";
+import { ConfigContext } from "../contexts/ConfigContext";
 
 const SingleAccount: FC<{
   accounts: Account[];
@@ -21,6 +22,14 @@ const SingleAccount: FC<{
   const [askMasterPw, setAskMasterPw] = useState(false);
   const [wrongPwMessage, setWrongPwMessage] = useState("");
   const [isPwInputDisabled, setIsPwInputDisabled] = useState(false);
+  const configContext = useContext(ConfigContext);
+  if (configContext) {
+    useEffect(() => {
+      if (configContext) {
+        console.log("Config from context! --->", configContext.config);
+      }
+    }, [configContext.config]);
+  }
 
   const key = "hello";
   const hashedKey = CryptoJS.SHA256(key).toString();
@@ -127,6 +136,9 @@ const SingleAccount: FC<{
           value={masterPassword}
           type="password"
           onChange={(e) => setMasterPassword(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") handleMasterPasswordClick();
+          }}
         ></input>
         <button
           onClick={() => {
