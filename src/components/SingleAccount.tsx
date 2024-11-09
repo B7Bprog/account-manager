@@ -12,9 +12,14 @@ const SingleAccount: FC<{
   const [currentAccount, setCurrentAccount] = useState<Partial<Account>>();
   const [deleteAllowed, setDeleteAllowed] = useState(false);
   const [deletePromptActive, setDeletePromptActive] = useState(false);
+  const [decrypted, setDecrypted] = useState(false);
 
   const key = "hello";
   const hashedKey = CryptoJS.SHA256(key).toString();
+
+  useEffect(() => {
+    setDecrypted(false);
+  }, [accountId]);
 
   const decryptAccountData = (account: Partial<Account>, key: string) => {
     console.log(account, "<<< account");
@@ -55,7 +60,7 @@ const SingleAccount: FC<{
     }
 
     console.log(decryptedAccount, "<<<< decrypted account here");
-
+    setDecrypted(true);
     setCurrentAccount(decryptedAccount);
   };
 
@@ -104,33 +109,64 @@ const SingleAccount: FC<{
       {currentAccount ? (
         <div>
           <div className={styles.single_account_title}>
-            <h2>{currentAccount.accountName}</h2>
+            <h2 id={styles.titleTag}>{currentAccount.accountName}</h2>{" "}
+            <button
+              id={styles.decryptButton}
+              disabled={decrypted ? true : false}
+              onClick={() => {
+                decryptAccountData(currentAccount, hashedKey);
+              }}
+            >
+              Decrypt
+            </button>
           </div>
           <p>
-            <strong>Login URL:</strong> {currentAccount.loginUrl}
+            <strong>Login URL:</strong>
+            {/U2F.*/.test(currentAccount.loginUrl!)
+              ? "Encrypted..."
+              : currentAccount.loginUrl}
           </p>
           <p>
-            <strong>Email:</strong> {currentAccount.email}
+            <strong>Email:</strong>
+            {/U2F.*/.test(currentAccount.email!)
+              ? "Encrypted..."
+              : currentAccount.email}
           </p>
           <p>
-            <strong>Username:</strong> {currentAccount.username}
+            <strong>Username:</strong>
+            {/U2F.*/.test(currentAccount.username!)
+              ? "Encrypted..."
+              : currentAccount.username}
           </p>
           <p>
-            <strong>Password:</strong> {currentAccount.password}
-          </p>
-
-          <p>
-            <strong>Password Expiry:</strong> {currentAccount.passwordExpiry}
-          </p>
-          <p>
-            <strong>Type of 2FA:</strong> {currentAccount.typeOf2FA}
-          </p>
-
-          <p>
-            <strong>Account Status:</strong> {currentAccount.accountStatus}
+            <strong>Password:</strong>
+            {/U2F.*/.test(currentAccount.password!)
+              ? "Encrypted..."
+              : currentAccount.password}
           </p>
           <p>
-            <strong>Created At:</strong> {currentAccount.createdAt}
+            <strong>Password Expiry:</strong>
+            {/U2F.*/.test(currentAccount.passwordExpiry!)
+              ? "Encrypted..."
+              : currentAccount.passwordExpiry}
+          </p>
+          <p>
+            <strong>Type of 2FA:</strong>
+            {/U2F.*/.test(currentAccount.typeOf2FA!)
+              ? "Encrypted..."
+              : currentAccount.typeOf2FA}
+          </p>
+          <p>
+            <strong>Account Status:</strong>
+            {/U2F.*/.test(currentAccount.accountStatus!)
+              ? "Encrypted..."
+              : currentAccount.accountStatus}
+          </p>
+          <p>
+            <strong>Created At:</strong>
+            {/U2F.*/.test(currentAccount.createdAt!)
+              ? "Encrypted..."
+              : currentAccount.createdAt}
           </p>
 
           <div className={styles.description_wrapper}>
@@ -138,7 +174,11 @@ const SingleAccount: FC<{
               <strong>Description:</strong>
             </p>
             <div className={styles.description_box}>
-              <p>{currentAccount.description}</p>
+              <p>
+                {/U2F.*/.test(currentAccount.description!)
+                  ? "Encrypted..."
+                  : currentAccount.description}
+              </p>
             </div>
           </div>
 
@@ -147,16 +187,24 @@ const SingleAccount: FC<{
               <strong>Security Question:</strong>
             </p>
             <div className={styles.security_box}>
-              <p>{currentAccount.securityQuestion}</p>
+              <p>
+                {/U2F.*/.test(currentAccount.securityQuestion!)
+                  ? "Encrypted..."
+                  : currentAccount.securityQuestion}
+              </p>
             </div>
           </div>
+
           <div className={styles.security_answer_wrapper}>
             <p>
               <strong>Security Answer:</strong>
             </p>
-
             <div className={styles.security_answer_box}>
-              <p>{currentAccount.securityAnswer}</p>
+              <p>
+                {/U2F.*/.test(currentAccount.securityAnswer!)
+                  ? "Encrypted..."
+                  : currentAccount.securityAnswer}
+              </p>
             </div>
           </div>
 
@@ -165,7 +213,11 @@ const SingleAccount: FC<{
               <strong>Backup Codes:</strong>
             </p>
             <div className={styles.backup_codes_box}>
-              <p>{currentAccount.backupCodes}</p>
+              <p>
+                {/U2F.*/.test(currentAccount.backupCodes!)
+                  ? "Encrypted..."
+                  : currentAccount.backupCodes}
+              </p>
             </div>
           </div>
           <div id={styles.delete_button_wrapper}>
@@ -174,18 +226,6 @@ const SingleAccount: FC<{
               onClick={handleDeleteButtonPress}
             >
               Delete account
-            </button>
-            <button
-              onClick={() => {
-                console.log(
-                  "Current account when clicking before calling decrypt: ",
-                  currentAccount
-                );
-
-                decryptAccountData(currentAccount, hashedKey);
-              }}
-            >
-              Decrypt
             </button>
           </div>
         </div>

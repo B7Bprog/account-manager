@@ -98,8 +98,19 @@
 }
 
 .single_account_title {
-  text-decoration: underline;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+
   margin-bottom: 1rem;
+}
+
+#titleTag {
+  text-decoration: underline;
+}
+
+#decryptButton:hover {
+  border-color: #940000;
 }
 
 strong {
