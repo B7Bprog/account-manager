@@ -73,14 +73,23 @@ const Form: FC<{
         field !== "accountName" &&
         value !== "N/A"
       ) {
+        console.log("Encrypting the following field: ", field);
+        console.log("Here the type of value is: ", typeof value);
+
         encryptedAccount[field as keyof Account] = CryptoJS.AES.encrypt(
           value,
           key
         ).toString();
+
+        console.log(
+          "Encrypted field: ",
+          encryptedAccount[field as keyof Account]
+        );
       } else {
         encryptedAccount[field as keyof Account] = value;
       }
     }
+    console.log("Encrypted account here: ", encryptedAccount);
 
     return encryptedAccount;
   }
@@ -90,7 +99,13 @@ const Form: FC<{
   }, [pwHash]);
 
   const handleInputClick = () => {
-    setPwHash(CryptoJS.SHA256(input).toString());
+    console.log(input, "<<< input before hashing it");
+
+    // setPwHash(CryptoJS.SHA256(input).toString());
+
+    const hashedInput = CryptoJS.SHA256(input).toString();
+    console.log("Hashed input:", hashedInput);
+    setPwHash(hashedInput);
 
     try {
       setAccounts((accounts: Account[]) => {
@@ -113,9 +128,13 @@ const Form: FC<{
           },
           pwHash
         );
+        console.log(
+          "This should also be the encrypted account:",
+          encryptedAccount
+        );
 
         const newAccount: Account = {
-          ...encryptedAccount,
+          // ...encryptedAccount,
           id: uuidv1(),
           accountName: encryptedAccount.accountName || "N/A",
           loginUrl: encryptedAccount.loginUrl || "N/A",
@@ -129,7 +148,7 @@ const Form: FC<{
           passwordExpiry: encryptedAccount.passwordExpiry || "N/A",
           backupCodes: encryptedAccount.backupCodes || "N/A",
           accountStatus: encryptedAccount.accountStatus || "N/A",
-          createdAt: formattedDate,
+          createdAt: encryptedAccount.createdAt || "N/A",
         };
 
         return [newAccount, ...accounts];
@@ -155,7 +174,10 @@ const Form: FC<{
     return (
       <div>
         <h2>{pwMessage}</h2>
-        <input type="password" onChange={(e) => setInput}></input>
+        <input
+          type="password"
+          onChange={(e) => setInput(e.target.value)}
+        ></input>
         <button
           onClick={() => {
             handleInputClick();

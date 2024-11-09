@@ -105,7 +105,7 @@ ipcMain.on("loadAccounts", (event) => {
     })
     .catch((err) => {
       console.error("Failed to read accounts file:", err);
-      event.reply("loadAccountsResponse", "[]"); // Send an empty array if there is an error
+      event.reply("loadAccountsResponse", "[]");
     });
 });
 
