@@ -13,7 +13,7 @@ const SingleAccount: FC<{
   const [deleteAllowed, setDeleteAllowed] = useState(false);
   const [deletePromptActive, setDeletePromptActive] = useState(false);
 
-  const key = "mySecretPassword";
+  const key = "hello";
   const hashedKey = CryptoJS.SHA256(key).toString();
 
   const decryptAccountData = (account: Partial<Account>, key: string) => {
@@ -39,23 +39,16 @@ const SingleAccount: FC<{
       ) {
         console.log(value, "<<< value here");
         console.log(typeof value, "<<< type of value here");
-        if (field === "password") {
-          console.log("inside decrypt if");
 
-          const cleanValue = "U2FsdGVkX1/gUmQyHajt92IeIwVRgyU0tbSbXRQ/jNE=";
-          //value.replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
-          // decryptedAccount[field as keyof Account] = CryptoJS.AES.decrypt(
-          //   cleanValue,
-          //   "hello"
-          // ).toString(CryptoJS.enc.Utf8);
-          const decryptedText = CryptoJS.AES.decrypt(
-            cleanValue,
-            hashedKey
-          ).toString(CryptoJS.enc.Utf8);
-          decryptedAccount[field as keyof Account] = decryptedText;
-          //CryptoJS.enc.Utf8
-          console.log("Decrypted text: ----->", decryptedText);
-        }
+        console.log("inside decrypt if");
+        const cleanValue = value;
+        const decryptedText = CryptoJS.AES.decrypt(
+          cleanValue,
+          hashedKey
+        ).toString(CryptoJS.enc.Utf8);
+        decryptedAccount[field as keyof Account] = decryptedText;
+
+        console.log("Decrypted text: ----->", decryptedText);
       } else {
         decryptedAccount[field as keyof Account] = value;
       }
@@ -63,8 +56,7 @@ const SingleAccount: FC<{
 
     console.log(decryptedAccount, "<<<< decrypted account here");
 
-    //setCurrentAccount(decryptedAccount);
-    // return decryptAccountData;
+    setCurrentAccount(decryptedAccount);
   };
 
   useEffect(() => {

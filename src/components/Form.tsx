@@ -89,6 +89,7 @@ const Form: FC<{
         encryptedAccount[field as keyof Account] = value;
       }
     }
+
     console.log("Encrypted account here: ", encryptedAccount);
 
     return encryptedAccount;
@@ -105,7 +106,7 @@ const Form: FC<{
 
     const hashedInput = CryptoJS.SHA256(input).toString();
     console.log("Hashed input:", hashedInput);
-    setPwHash(hashedInput);
+    // setPwHash(hashedInput);
 
     try {
       setAccounts((accounts: Account[]) => {
@@ -126,7 +127,7 @@ const Form: FC<{
             accountStatus: accountStatus || "N/A",
             createdAt: formattedDate,
           },
-          pwHash
+          hashedInput
         );
         console.log(
           "This should also be the encrypted account:",
@@ -150,7 +151,7 @@ const Form: FC<{
           accountStatus: encryptedAccount.accountStatus || "N/A",
           createdAt: encryptedAccount.createdAt || "N/A",
         };
-
+        setInput("");
         return [newAccount, ...accounts];
       });
       setNewAccountAdded(true);
