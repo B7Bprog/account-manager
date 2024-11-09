@@ -27,7 +27,6 @@ const Form: FC<{
   const [pwPromptActive, setPwPromptActive] = useState(false);
   const [pwMessage, setPwMessage] = useState("");
   const [input, setInput] = useState("");
-  const [pwHash, setPwHash] = useState("");
 
   const resetFormFields = () => {
     setAccountName("");
@@ -94,10 +93,6 @@ const Form: FC<{
 
     return encryptedAccount;
   }
-
-  useEffect(() => {
-    if (pwHash) setInput("");
-  }, [pwHash]);
 
   const handleInputClick = () => {
     console.log(input, "<<< input before hashing it");

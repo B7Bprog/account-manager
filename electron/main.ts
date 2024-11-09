@@ -109,6 +109,17 @@ ipcMain.on("loadAccounts", (event) => {
     });
 });
 
+ipcMain.on("loadConfig", (event) => {
+  fs.readFile("./config.json", "utf-8")
+    .then((data) => {
+      event.reply("loadConfigResponse", data);
+    })
+    .catch((err) => {
+      console.error("Failed to read config file:", err);
+      event.reply("loadConfigResponse", "{}");
+    });
+});
+
 ipcMain.on("close-app", () => {
   if (win) {
     win.close();

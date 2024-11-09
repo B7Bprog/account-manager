@@ -13,27 +13,41 @@ const SingleAccount: FC<{
   const [deleteAllowed, setDeleteAllowed] = useState(false);
   const [deletePromptActive, setDeletePromptActive] = useState(false);
   const [decrypted, setDecrypted] = useState(false);
+  const [masterPassword, setMasterPassword] = useState("");
+  const [configFileContent, setConfigFileContent] = useState({
+    theme: "",
+    mk: "",
+  });
+  const [askMasterPw, setAskMasterPw] = useState(false);
+  const [wrongPwMessage, setWrongPwMessage] = useState("");
+  const [isPwInputDisabled, setIsPwInputDisabled] = useState(false);
 
   const key = "hello";
   const hashedKey = CryptoJS.SHA256(key).toString();
+
+  useEffect(() => {
+    window.ipcRenderer.send("loadConfig");
+
+    window.ipcRenderer.on("loadConfigResponse", (_event, data) => {
+      console.log(data, "data here");
+      setConfigFileContent(JSON.parse(data));
+    });
+
+    return () => {
+      window.ipcRenderer.removeAllListeners("loadAccountsResponse");
+    };
+  }, []);
 
   useEffect(() => {
     setDecrypted(false);
   }, [accountId]);
 
   const decryptAccountData = (account: Partial<Account>, key: string) => {
-    console.log(account, "<<< account");
-    console.log(hashedKey, "<<< hash for decrypt");
-
-    console.log("Inside decrypt function");
-
     //Try to use deep copy here instead
 
     const decryptedAccount: Partial<Account> = JSON.parse(
       JSON.stringify(account)
     );
-
-    console.log("decryptedAccount before loop", decryptedAccount);
 
     for (const [field, value] of Object.entries(account)) {
       if (
@@ -42,24 +56,17 @@ const SingleAccount: FC<{
         field !== "accountName" &&
         value !== "N/A"
       ) {
-        console.log(value, "<<< value here");
-        console.log(typeof value, "<<< type of value here");
-
-        console.log("inside decrypt if");
         const cleanValue = value;
         const decryptedText = CryptoJS.AES.decrypt(
           cleanValue,
           hashedKey
         ).toString(CryptoJS.enc.Utf8);
         decryptedAccount[field as keyof Account] = decryptedText;
-
-        console.log("Decrypted text: ----->", decryptedText);
       } else {
         decryptedAccount[field as keyof Account] = value;
       }
     }
 
-    console.log(decryptedAccount, "<<<< decrypted account here");
     setDecrypted(true);
     setCurrentAccount(decryptedAccount);
   };
@@ -67,10 +74,6 @@ const SingleAccount: FC<{
   useEffect(() => {
     setCurrentAccount(accounts.find((account) => account.id === accountId));
   }, [accountId, accounts]);
-
-  useEffect(() => {
-    console.log("Current account set here ", currentAccount);
-  }, [currentAccount]);
 
   const handleDeleteButtonPress = () => {
     if (!deleteAllowed) {
@@ -86,6 +89,56 @@ const SingleAccount: FC<{
       });
     });
   };
+
+  const handleMasterPasswordClick = () => {
+    console.log("inside master click");
+
+    const masterPasswordHash = CryptoJS.SHA256(masterPassword).toString();
+
+    console.log("hashed pw:", masterPasswordHash);
+
+    console.log("pw from file:", configFileContent);
+
+    if (masterPasswordHash === configFileContent.mk) {
+      console.log("decrypting now");
+
+      decryptAccountData(currentAccount!, hashedKey);
+      setAskMasterPw(false);
+      setMasterPassword("");
+    } else {
+      console.log("in else for wrong pw");
+      setMasterPassword("");
+      setIsPwInputDisabled(true);
+      setWrongPwMessage("Wrong password! Try again in 5 seconds...");
+      setTimeout(() => {
+        setWrongPwMessage("");
+        setIsPwInputDisabled(false);
+        console.log("reset");
+      }, 5000);
+    }
+  };
+
+  if (askMasterPw) {
+    return (
+      <div>
+        <h2>Enter Master Password:</h2>
+        <input
+          disabled={isPwInputDisabled}
+          value={masterPassword}
+          type="password"
+          onChange={(e) => setMasterPassword(e.target.value)}
+        ></input>
+        <button
+          onClick={() => {
+            handleMasterPasswordClick();
+          }}
+        >
+          Enter
+        </button>
+        {wrongPwMessage ? <h2>{wrongPwMessage}</h2> : null}
+      </div>
+    );
+  }
 
   if (deletePromptActive) {
     return (
@@ -114,7 +167,7 @@ const SingleAccount: FC<{
               id={styles.decryptButton}
               disabled={decrypted ? true : false}
               onClick={() => {
-                decryptAccountData(currentAccount, hashedKey);
+                setAskMasterPw(true);
               }}
             >
               Decrypt
