@@ -32,16 +32,11 @@ function App() {
   }, []);
 
   useEffect(() => {
-    console.log("loading config");
-
     window.ipcRenderer.send("loadConfig");
 
     window.ipcRenderer.on("loadConfigResponse", (_event, data) => {
       if (configContext) {
-        console.log("inside if");
-        console.log(JSON.parse(data), "parsed data here");
         configContext.setConfig(JSON.parse(data));
-        console.log("Config here after setting context:", configContext.config);
       }
     });
 

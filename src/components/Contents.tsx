@@ -8,8 +8,8 @@ const Contents: FC<{
   accounts: Account[];
 }> = ({ accounts }) => {
   const [sortedAccounts, setSortedAccounts] = useState<Account[]>([]);
-  const [sortedStraightByName, setSortedStraightByName] = useState(false);
-  const [sortedStraightByDate, setSortedStraightByDate] = useState(false);
+  const [sortedStraightByName, setSortedStraightByName] = useState(true);
+  const [sortedStraightByDate, setSortedStraightByDate] = useState(true);
 
   useEffect(() => {
     sortAccountsByNames();
@@ -69,7 +69,7 @@ const Contents: FC<{
         <ul>
           {sortedAccounts.map((account: Account) => {
             return (
-              <Link to={`/single/${account.id}`}>
+              <Link to={`/single/${account.id}`} key={account.id}>
                 <div className={styles.account_name}>
                   <li>{account.accountName}</li>
                 </div>

@@ -23,22 +23,18 @@ const SingleAccount: FC<{
   const [wrongPwMessage, setWrongPwMessage] = useState("");
   const [isPwInputDisabled, setIsPwInputDisabled] = useState(false);
   const configContext = useContext(ConfigContext);
-  if (configContext) {
-    useEffect(() => {
-      if (configContext) {
-        console.log("Config from context! --->", configContext.config);
-      }
-    }, [configContext.config]);
-  }
-
-  const key = "hello";
-  const hashedKey = CryptoJS.SHA256(key).toString();
+  // if (configContext) {
+  //   useEffect(() => {
+  //     if (configContext) {
+  //       console.log("Config from context! --->", configContext.config);
+  //     }
+  //   }, [configContext.config]);
+  // }
 
   useEffect(() => {
     window.ipcRenderer.send("loadConfig");
 
     window.ipcRenderer.on("loadConfigResponse", (_event, data) => {
-      console.log(data, "data here");
       setConfigFileContent(JSON.parse(data));
     });
 
@@ -66,10 +62,9 @@ const SingleAccount: FC<{
         value !== "N/A"
       ) {
         const cleanValue = value;
-        const decryptedText = CryptoJS.AES.decrypt(
-          cleanValue,
-          hashedKey
-        ).toString(CryptoJS.enc.Utf8);
+        const decryptedText = CryptoJS.AES.decrypt(cleanValue, key).toString(
+          CryptoJS.enc.Utf8
+        );
         decryptedAccount[field as keyof Account] = decryptedText;
       } else {
         decryptedAccount[field as keyof Account] = value;
@@ -98,35 +93,25 @@ const SingleAccount: FC<{
       });
     });
   };
-
+  /////////////////////// Handle Master Password /////////////////////////////////////////
   const handleMasterPasswordClick = () => {
-    console.log("inside master click");
-
     const masterPasswordHash = CryptoJS.SHA256(masterPassword).toString();
 
-    console.log("hashed pw:", masterPasswordHash);
-
-    console.log("pw from file:", configFileContent);
-
     if (masterPasswordHash === configFileContent.mk) {
-      console.log("decrypting now");
-
-      decryptAccountData(currentAccount!, hashedKey);
+      decryptAccountData(currentAccount!, masterPassword);
       setAskMasterPw(false);
       setMasterPassword("");
     } else {
-      console.log("in else for wrong pw");
       setMasterPassword("");
       setIsPwInputDisabled(true);
       setWrongPwMessage("Wrong password! Try again in 5 seconds...");
       setTimeout(() => {
         setWrongPwMessage("");
         setIsPwInputDisabled(false);
-        console.log("reset");
       }, 5000);
     }
   };
-
+  ////////////////////////////////////////////////////////////////////////////////////
   if (askMasterPw) {
     return (
       <div>
@@ -141,6 +126,7 @@ const SingleAccount: FC<{
           }}
         ></input>
         <button
+          disabled={isPwInputDisabled}
           onClick={() => {
             handleMasterPasswordClick();
           }}

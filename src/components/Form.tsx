@@ -1,8 +1,9 @@
-import { FC, FormEvent, useEffect, useState } from "react";
+import { FC, FormEvent, useContext, useState } from "react";
 import styles from "../styles/form.module.css";
 import { v1 as uuidv1 } from "uuid";
 import { Account } from "./AccountList";
 import CryptoJS from "crypto-js";
+import { ConfigContext } from "../contexts/ConfigContext";
 
 const Form: FC<{
   setAccounts: React.Dispatch<React.SetStateAction<Account[]>>;
@@ -27,6 +28,9 @@ const Form: FC<{
   const [pwPromptActive, setPwPromptActive] = useState(false);
   const [pwMessage, setPwMessage] = useState("");
   const [input, setInput] = useState("");
+  const [wrongPwMessage, setWrongPwMessage] = useState("");
+  const configContext = useContext(ConfigContext);
+  const [isPwInputDisabled, setIsPwInputDisabled] = useState(false);
 
   const resetFormFields = () => {
     setAccountName("");
@@ -72,115 +76,117 @@ const Form: FC<{
         field !== "accountName" &&
         value !== "N/A"
       ) {
-        console.log("Encrypting the following field: ", field);
-        console.log("Here the type of value is: ", typeof value);
-
         encryptedAccount[field as keyof Account] = CryptoJS.AES.encrypt(
           value,
           key
         ).toString();
-
-        console.log(
-          "Encrypted field: ",
-          encryptedAccount[field as keyof Account]
-        );
       } else {
         encryptedAccount[field as keyof Account] = value;
       }
     }
 
-    console.log("Encrypted account here: ", encryptedAccount);
-
     return encryptedAccount;
   }
 
   const handleInputClick = () => {
-    console.log(input, "<<< input before hashing it");
-
     // setPwHash(CryptoJS.SHA256(input).toString());
 
     const hashedInput = CryptoJS.SHA256(input).toString();
-    console.log("Hashed input:", hashedInput);
+
     // setPwHash(hashedInput);
+    if (configContext) {
+      if (configContext.config.mk === hashedInput) {
+        try {
+          setAccounts((accounts: Account[]) => {
+            const encryptedAccount = encryptAccountData(
+              {
+                id: uuidv1(),
+                accountName: accountName || "N/A",
+                loginUrl: loginUrl || "N/A",
+                email: email || "N/A",
+                username: username || "N/A",
+                password: password || "N/A",
+                description: description || "N/A",
+                typeOf2FA: typeOf2FA || "N/A",
+                securityQuestion: securityQuestion || "N/A",
+                securityAnswer: securityAnswer || "N/A",
+                passwordExpiry: passwordExpiry || "N/A",
+                backupCodes: backupCodes || "N/A",
+                accountStatus: accountStatus || "N/A",
+                createdAt: formattedDate,
+              },
+              input
+            );
 
-    try {
-      setAccounts((accounts: Account[]) => {
-        const encryptedAccount = encryptAccountData(
-          {
-            id: uuidv1(),
-            accountName: accountName || "N/A",
-            loginUrl: loginUrl || "N/A",
-            email: email || "N/A",
-            username: username || "N/A",
-            password: password || "N/A",
-            description: description || "N/A",
-            typeOf2FA: typeOf2FA || "N/A",
-            securityQuestion: securityQuestion || "N/A",
-            securityAnswer: securityAnswer || "N/A",
-            passwordExpiry: passwordExpiry || "N/A",
-            backupCodes: backupCodes || "N/A",
-            accountStatus: accountStatus || "N/A",
-            createdAt: formattedDate,
-          },
-          hashedInput
-        );
-        console.log(
-          "This should also be the encrypted account:",
-          encryptedAccount
-        );
-
-        const newAccount: Account = {
-          // ...encryptedAccount,
-          id: uuidv1(),
-          accountName: encryptedAccount.accountName || "N/A",
-          loginUrl: encryptedAccount.loginUrl || "N/A",
-          email: encryptedAccount.email || "N/A",
-          username: encryptedAccount.username || "N/A",
-          password: encryptedAccount.password || "N/A",
-          description: encryptedAccount.description || "N/A",
-          typeOf2FA: encryptedAccount.typeOf2FA || "N/A",
-          securityQuestion: encryptedAccount.securityQuestion || "N/A",
-          securityAnswer: encryptedAccount.securityAnswer || "N/A",
-          passwordExpiry: encryptedAccount.passwordExpiry || "N/A",
-          backupCodes: encryptedAccount.backupCodes || "N/A",
-          accountStatus: encryptedAccount.accountStatus || "N/A",
-          createdAt: encryptedAccount.createdAt || "N/A",
-        };
+            const newAccount: Account = {
+              // ...encryptedAccount,
+              id: uuidv1(),
+              accountName: encryptedAccount.accountName || "N/A",
+              loginUrl: encryptedAccount.loginUrl || "N/A",
+              email: encryptedAccount.email || "N/A",
+              username: encryptedAccount.username || "N/A",
+              password: encryptedAccount.password || "N/A",
+              description: encryptedAccount.description || "N/A",
+              typeOf2FA: encryptedAccount.typeOf2FA || "N/A",
+              securityQuestion: encryptedAccount.securityQuestion || "N/A",
+              securityAnswer: encryptedAccount.securityAnswer || "N/A",
+              passwordExpiry: encryptedAccount.passwordExpiry || "N/A",
+              backupCodes: encryptedAccount.backupCodes || "N/A",
+              accountStatus: encryptedAccount.accountStatus || "N/A",
+              createdAt: encryptedAccount.createdAt || "N/A",
+            };
+            setInput("");
+            return [newAccount, ...accounts];
+          });
+          setNewAccountAdded(true);
+          setTimeout(() => {
+            setNewAccountAdded(false);
+            resetFormFields();
+          }, 2500);
+          setPwMessage("");
+          setPwPromptActive(false);
+        } catch {
+          setNewAccountAdded(false);
+          setError("Something wen't wrong! Account NOT saved.");
+        }
+      } else {
         setInput("");
-        return [newAccount, ...accounts];
-      });
-      setNewAccountAdded(true);
-      setTimeout(() => {
-        setNewAccountAdded(false);
-        resetFormFields();
-      }, 2500);
-      setPwMessage("");
-      setPwPromptActive(false);
-    } catch {
-      setNewAccountAdded(false);
-      setError("Something wen't wrong! Account NOT saved.");
+        setIsPwInputDisabled(true);
+        setWrongPwMessage("Wrong password! Try again in 5 seconds...");
+        setTimeout(() => {
+          setWrongPwMessage("");
+          setIsPwInputDisabled(false);
+        }, 5000);
+      }
     }
   };
 
   if (newAccountAdded) {
     return <h2>Account has been saved</h2>;
   }
-
+  /////////////////// Master Password input ///////////////////
   if (pwMessage) {
     return (
       <div>
         <h2>{pwMessage}</h2>
         <input
+          value={input}
+          disabled={isPwInputDisabled}
           type="password"
           onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") handleInputClick();
+          }}
         ></input>
         <button
+          disabled={isPwInputDisabled}
           onClick={() => {
             handleInputClick();
           }}
         >
           Enter
         </button>
+        {wrongPwMessage ? <h2>{wrongPwMessage}</h2> : null}
       </div>
     );
   }

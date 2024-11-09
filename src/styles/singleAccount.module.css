@@ -109,6 +109,10 @@
   text-decoration: underline;
 }
 
+#decryptButton {
+  height: 2.8rem;
+}
+
 #decryptButton:hover {
   border-color: #940000;
 }
