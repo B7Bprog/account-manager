@@ -23,13 +23,6 @@ const SingleAccount: FC<{
   const [wrongPwMessage, setWrongPwMessage] = useState("");
   const [isPwInputDisabled, setIsPwInputDisabled] = useState(false);
   const configContext = useContext(ConfigContext);
-  // if (configContext) {
-  //   useEffect(() => {
-  //     if (configContext) {
-  //       console.log("Config from context! --->", configContext.config);
-  //     }
-  //   }, [configContext.config]);
-  // }
 
   useEffect(() => {
     window.ipcRenderer.send("loadConfig");
@@ -59,6 +52,7 @@ const SingleAccount: FC<{
         typeof value === "string" &&
         field !== "id" &&
         field !== "accountName" &&
+        field !== "createdAt" &&
         value !== "N/A"
       ) {
         const cleanValue = value;

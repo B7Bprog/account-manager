@@ -11,9 +11,9 @@ const Header = () => {
       <Link className={styles.headerLink} to="/">
         <h1>Account Manager</h1>
       </Link>
-      <Link className={styles.headerLink} to="/list">
+      {/* <Link className={styles.headerLink} to="/list">
         Accounts
-      </Link>
+      </Link> */}
       <Link className={styles.headerLink} to="/set">
         Add Account
       </Link>

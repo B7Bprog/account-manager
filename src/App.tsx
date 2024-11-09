@@ -14,6 +14,7 @@ import { ConfigContext } from "./contexts/ConfigContext";
 function App() {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [keyholder, setKeyholder] = useState("");
   const configContext = useContext(ConfigContext);
 
   useEffect(() => {

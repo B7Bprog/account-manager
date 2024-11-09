@@ -74,6 +74,7 @@ const Form: FC<{
         typeof value === "string" &&
         field !== "id" &&
         field !== "accountName" &&
+        field !== "createdAt" &&
         value !== "N/A"
       ) {
         encryptedAccount[field as keyof Account] = CryptoJS.AES.encrypt(
@@ -199,12 +200,12 @@ const Form: FC<{
     <form onSubmit={(e) => handleSubmit(e)}>
       <div id={styles.account_form}>
         <div className={styles.input_wrapper}>
-          <label>Account Name:</label>
+          <label>Account Name: *</label>
           <input
             value={accountName}
             maxLength={80}
             onChange={(e) => setAccountName(e.target.value)}
-            placeholder="Enter account name"
+            placeholder="Enter account name [mandatory]"
           />
         </div>
 
