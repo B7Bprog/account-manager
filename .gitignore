@@ -9,6 +9,7 @@ lerna-debug.log*
 
 config.json
 testFile.js
+testFileTypeScript.ts
 accounts.json
 node_modules
 dist-electron

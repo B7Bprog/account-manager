@@ -25,6 +25,13 @@ const SingleAccount: FC<{
   const configContext = useContext(ConfigContext);
 
   useEffect(() => {
+    const container = document.querySelector(`.${styles.accountListItem}`);
+    if (container) {
+      container.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [accountId]);
+
+  useEffect(() => {
     window.ipcRenderer.send("loadConfig");
 
     window.ipcRenderer.on("loadConfigResponse", (_event, data) => {
