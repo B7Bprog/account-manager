@@ -24,12 +24,16 @@ const SingleAccount: FC<{
   const [isPwInputDisabled, setIsPwInputDisabled] = useState(false);
   const configContext = useContext(ConfigContext);
 
+  //////////////////////// Scroll to top ////////////////////////////////////////
+
   useEffect(() => {
     const container = document.querySelector(`.${styles.accountListItem}`);
     if (container) {
       container.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [accountId]);
+
+  ///////////////////////// Load Config ////////////////////////////////////////
 
   useEffect(() => {
     window.ipcRenderer.send("loadConfig");
@@ -43,9 +47,13 @@ const SingleAccount: FC<{
     };
   }, []);
 
+  //////////////////////////////////////////////////////////////////////////////
+
   useEffect(() => {
     setDecrypted(false);
   }, [accountId]);
+
+  ////////////////////////// Decrypt Account ///////////////////////////////////
 
   const decryptAccountData = (account: Partial<Account>, key: string) => {
     //Try to use deep copy here instead
@@ -76,9 +84,13 @@ const SingleAccount: FC<{
     setCurrentAccount(decryptedAccount);
   };
 
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
   useEffect(() => {
     setCurrentAccount(accounts.find((account) => account.id === accountId));
   }, [accountId, accounts]);
+
+  ///////////////////////// Handle Delete Account //////////////////////////////////////////
 
   const handleDeleteButtonPress = () => {
     if (!deleteAllowed) {
@@ -112,7 +124,7 @@ const SingleAccount: FC<{
       }, 5000);
     }
   };
-  ////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////// RETURNS //////////////////////////////////////////
   if (askMasterPw) {
     return (
       <div>

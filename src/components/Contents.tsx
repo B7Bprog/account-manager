@@ -53,6 +53,8 @@ const Contents: FC<{
     setSortedStraightByDate(!sortedStraightByDate);
   };
 
+  ////////////////////////////// RETURNS ////////////////////////////////////////////
+
   return (
     <div id={styles.contentsWrapper}>
       <h1>Contents</h1>
