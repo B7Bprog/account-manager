@@ -10,12 +10,19 @@ import { HashRouter, Routes, Route } from "react-router-dom";
 import MainPage from "./components/MainPage";
 import SingleAccount from "./components/SingleAccount";
 import { ConfigContext } from "./contexts/ConfigContext";
+import ChangePassword from "./components/ChangePassword";
 
 function App() {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [keyholder, setKeyholder] = useState("");
   const configContext = useContext(ConfigContext);
+
+  // previous config content
+  // {
+  //   "theme": "dark",
+  //   "mk": "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+  // }
 
   useEffect(() => {
     window.ipcRenderer.send("loadAccounts");
@@ -67,23 +74,33 @@ function App() {
             <Contents accounts={accounts} />
           </div>
           <div className={styles.main_area}>
-            <Routes>
-              <Route path="/" element={<MainPage />} />
-              <Route path="/set" element={<Form setAccounts={setAccounts} />} />
-              <Route
-                path="/list"
-                element={<AccountList accounts={accounts} />}
-              />
-              <Route
-                path="/single/:accountId"
-                element={
-                  <SingleAccount
-                    accounts={accounts}
-                    setAccounts={setAccounts}
-                  />
-                }
-              />
-            </Routes>
+            {!configContext?.config.mk ? (
+              <div id={styles.add_new_pw}>
+                <h3>You must set a main password:</h3>
+                <ChangePassword />
+              </div>
+            ) : (
+              <Routes>
+                <Route path="/" element={<MainPage />} />
+                <Route
+                  path="/set"
+                  element={<Form setAccounts={setAccounts} />}
+                />
+                <Route
+                  path="/list"
+                  element={<AccountList accounts={accounts} />}
+                />
+                <Route
+                  path="/single/:accountId"
+                  element={
+                    <SingleAccount
+                      accounts={accounts}
+                      setAccounts={setAccounts}
+                    />
+                  }
+                />
+              </Routes>
+            )}
           </div>
         </div>
         <div className={styles.copyright}>
